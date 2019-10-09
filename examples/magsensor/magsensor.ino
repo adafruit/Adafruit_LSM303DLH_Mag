@@ -3,7 +3,7 @@
 #include <Adafruit_LSM303DLH_Mag.h>
 
 /* Assign a unique ID to this sensor at the same time */
-Adafruit_LSM303_Mag_Unified mag = Adafruit_LSM303_Mag_Unified(12345);
+Adafruit_LSM303DLH_Mag_Unified mag = Adafruit_LSM303DLH_Mag_Unified(12345);
 
 void displaySensorDetails(void)
 {

@@ -12,7 +12,7 @@ git:
 
 env:
   global:
-    - PRETTYNAME="Adafruit LSM303DLHC"
+    - PRETTYNAME="Adafruit LSM303DLH Mag"
 
 before_install:
   - source <(curl -SLs https://raw.githubusercontent.com/adafruit/travis-ci-arduino/master/install.sh)

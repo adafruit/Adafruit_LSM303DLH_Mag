@@ -44,7 +44,7 @@ static float _lsm303Mag_Gauss_LSB_Z  = 980.0F;   // Varies with gain
     @brief  Abstract away platform differences in Arduino wire library
 */
 /**************************************************************************/
-void Adafruit_LSM303_Mag_Unified::write8(byte address, byte reg, byte value)
+void Adafruit_LSM303DLH_Mag_Unified::write8(byte address, byte reg, byte value)
 {
   Wire.beginTransmission(address);
   #if ARDUINO >= 100
@@ -62,7 +62,7 @@ void Adafruit_LSM303_Mag_Unified::write8(byte address, byte reg, byte value)
     @brief  Abstract away platform differences in Arduino wire library
 */
 /**************************************************************************/
-byte Adafruit_LSM303_Mag_Unified::read8(byte address, byte reg)
+byte Adafruit_LSM303DLH_Mag_Unified::read8(byte address, byte reg)
 {
   byte value;
 
@@ -89,7 +89,7 @@ byte Adafruit_LSM303_Mag_Unified::read8(byte address, byte reg)
     @brief  Reads the raw data from the sensor
 */
 /**************************************************************************/
-void Adafruit_LSM303_Mag_Unified::read()
+void Adafruit_LSM303DLH_Mag_Unified::read()
 {
   // Read the magnetometer
   Wire.beginTransmission((byte)LSM303_ADDRESS_MAG);
@@ -136,7 +136,7 @@ void Adafruit_LSM303_Mag_Unified::read()
     @brief  Instantiates a new Adafruit_LSM303 class
 */
 /**************************************************************************/
-Adafruit_LSM303_Mag_Unified::Adafruit_LSM303_Mag_Unified(int32_t sensorID) {
+Adafruit_LSM303DLH_Mag_Unified::Adafruit_LSM303DLH_Mag_Unified(int32_t sensorID) {
   _sensorID = sensorID;
   autoRangeEnabled = false;
 
@@ -155,7 +155,7 @@ Adafruit_LSM303_Mag_Unified::Adafruit_LSM303_Mag_Unified(int32_t sensorID) {
     @brief  Setups the HW
 */
 /**************************************************************************/
-bool Adafruit_LSM303_Mag_Unified::begin()
+bool Adafruit_LSM303DLH_Mag_Unified::begin()
 {
   // Enable I2C
   Wire.begin();
@@ -182,7 +182,7 @@ bool Adafruit_LSM303_Mag_Unified::begin()
     @brief  Enables or disables auto-ranging
 */
 /**************************************************************************/
-void Adafruit_LSM303_Mag_Unified::enableAutoRange(bool enabled)
+void Adafruit_LSM303DLH_Mag_Unified::enableAutoRange(bool enabled)
 {
   autoRangeEnabled = enabled;
 }
@@ -192,7 +192,7 @@ void Adafruit_LSM303_Mag_Unified::enableAutoRange(bool enabled)
     @brief  Sets the magnetometer's gain
 */
 /**************************************************************************/
-void Adafruit_LSM303_Mag_Unified::setMagGain(lsm303MagGain gain)
+void Adafruit_LSM303DLH_Mag_Unified::setMagGain(lsm303MagGain gain)
 {
   write8(LSM303_ADDRESS_MAG, LSM303_REGISTER_MAG_CRB_REG_M, (byte)gain);
 
@@ -236,7 +236,7 @@ void Adafruit_LSM303_Mag_Unified::setMagGain(lsm303MagGain gain)
     @brief  Sets the magnetometer's update rate
 */
 /**************************************************************************/
-void Adafruit_LSM303_Mag_Unified::setMagRate(lsm303MagRate rate)
+void Adafruit_LSM303DLH_Mag_Unified::setMagRate(lsm303MagRate rate)
 {
 	byte reg_m = ((byte)rate & 0x07) << 2;
   write8(LSM303_ADDRESS_MAG, LSM303_REGISTER_MAG_CRA_REG_M, reg_m);
@@ -248,7 +248,7 @@ void Adafruit_LSM303_Mag_Unified::setMagRate(lsm303MagRate rate)
     @brief  Gets the most recent sensor event
 */
 /**************************************************************************/
-bool Adafruit_LSM303_Mag_Unified::getEvent(sensors_event_t *event) {
+bool Adafruit_LSM303DLH_Mag_Unified::getEvent(sensors_event_t *event) {
   bool readingValid = false;
 
   /* Clear the event */
@@ -356,12 +356,12 @@ bool Adafruit_LSM303_Mag_Unified::getEvent(sensors_event_t *event) {
     @brief  Gets the sensor_t data
 */
 /**************************************************************************/
-void Adafruit_LSM303_Mag_Unified::getSensor(sensor_t *sensor) {
+void Adafruit_LSM303DLH_Mag_Unified::getSensor(sensor_t *sensor) {
   /* Clear the sensor_t object */
   memset(sensor, 0, sizeof(sensor_t));
 
   /* Insert the sensor name in the fixed length char array */
-  strncpy (sensor->name, "LSM303", sizeof(sensor->name) - 1);
+  strncpy (sensor->name, "LSM303DLH Mag", sizeof(sensor->name) - 1);
   sensor->name[sizeof(sensor->name)- 1] = 0;
   sensor->version     = 1;
   sensor->sensor_id   = _sensorID;

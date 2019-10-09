@@ -12,8 +12,8 @@
   Written by Bryan Siepert for Adafruit Industries.
   BSD license, all text above must be included in any redistribution
  ***************************************************************************/
-#ifndef __LSM303DLH_MAG_H__
-#define __LSM303DLH_MAG_H__
+#ifndef LSM303DLH_MAG_H
+#define LSM303DLH_MAG_H
 
 #if (ARDUINO >= 100)
  #include "Arduino.h"
@@ -100,10 +100,10 @@
 /*=========================================================================*/
 
 /* Unified sensor driver for the magnetometer */
-class Adafruit_LSM303_Mag_Unified : public Adafruit_Sensor
+class Adafruit_LSM303DLH_Mag_Unified : public Adafruit_Sensor
 {
   public:
-    Adafruit_LSM303_Mag_Unified(int32_t sensorID = -1);
+    Adafruit_LSM303DLH_Mag_Unified(int32_t sensorID = -1);
 
     bool begin(void);
     void enableAutoRange(bool enable);
