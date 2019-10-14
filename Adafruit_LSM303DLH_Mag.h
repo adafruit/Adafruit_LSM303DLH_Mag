@@ -82,14 +82,16 @@
     } lsm303MagRate;
 /*=========================================================================*/
 
-/*=========================================================================
-    INTERNAL MAGNETOMETER DATA TYPE
-    -----------------------------------------------------------------------*/
+/**************************************************************************/
+/*!
+    @brief  INTERNAL ACCELERATION DATA TYPE
+*/
+/**************************************************************************/
     typedef struct lsm303MagData_s
     {
-        int16_t x;
-        int16_t y;
-        int16_t z;
+        int16_t x; ///< x-axis data
+        int16_t y; ///< y-axis data
+        int16_t z; ///< z-axis data
     } lsm303MagData;
 /*=========================================================================*/
 
@@ -99,7 +101,9 @@
     #define LSM303_ID                     (0b11010100)
 /*=========================================================================*/
 
-/* Unified sensor driver for the magnetometer */
+/*!
+  @brief Unified sensor driver for the magnetometer
+*/
 class Adafruit_LSM303DLH_Mag_Unified : public Adafruit_Sensor
 {
   public:
@@ -112,9 +116,9 @@ class Adafruit_LSM303DLH_Mag_Unified : public Adafruit_Sensor
     bool getEvent(sensors_event_t*);
     void getSensor(sensor_t*);
 
-    lsm303MagData   raw;     // Last read magnetometer data will be available here
-    lsm303MagGain   magGain;
-    bool            autoRangeEnabled;
+    lsm303MagData   raw;     ///< Last read magnetometer data will be available here
+    lsm303MagGain   magGain; ///< The current magnetometer gain
+    bool            autoRangeEnabled; ///< True if auto ranging is enabled
 
   private:
     int32_t         _sensorID;

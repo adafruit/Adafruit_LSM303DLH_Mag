@@ -131,9 +131,11 @@ void Adafruit_LSM303DLH_Mag_Unified::read()
  CONSTRUCTOR
  ***************************************************************************/
 
+
 /**************************************************************************/
 /*!
-    @brief  Instantiates a new Adafruit_LSM303 class
+    @brief  Instantiates a new Adafruit_LSM303DLH_Mag_Unified class
+    @param sensorID an optional identifier for the sensor instance
 */
 /**************************************************************************/
 Adafruit_LSM303DLH_Mag_Unified::Adafruit_LSM303DLH_Mag_Unified(int32_t sensorID) {
@@ -153,6 +155,7 @@ Adafruit_LSM303DLH_Mag_Unified::Adafruit_LSM303DLH_Mag_Unified(int32_t sensorID)
 /**************************************************************************/
 /*!
     @brief  Setups the HW
+    @returns True on success, false if the sensor cannot be found
 */
 /**************************************************************************/
 bool Adafruit_LSM303DLH_Mag_Unified::begin()
@@ -180,6 +183,7 @@ bool Adafruit_LSM303DLH_Mag_Unified::begin()
 /**************************************************************************/
 /*!
     @brief  Enables or disables auto-ranging
+    @param enabled True to enable auto-ranging, false to disable
 */
 /**************************************************************************/
 void Adafruit_LSM303DLH_Mag_Unified::enableAutoRange(bool enabled)
@@ -190,6 +194,7 @@ void Adafruit_LSM303DLH_Mag_Unified::enableAutoRange(bool enabled)
 /**************************************************************************/
 /*!
     @brief  Sets the magnetometer's gain
+    @param gain a `lsm303MagGain` specifying the new gain
 */
 /**************************************************************************/
 void Adafruit_LSM303DLH_Mag_Unified::setMagGain(lsm303MagGain gain)
@@ -234,6 +239,7 @@ void Adafruit_LSM303DLH_Mag_Unified::setMagGain(lsm303MagGain gain)
 /**************************************************************************/
 /*!
     @brief  Sets the magnetometer's update rate
+    @param  rate A `lsm303MagRate` specifying the new rate
 */
 /**************************************************************************/
 void Adafruit_LSM303DLH_Mag_Unified::setMagRate(lsm303MagRate rate)
@@ -246,6 +252,8 @@ void Adafruit_LSM303DLH_Mag_Unified::setMagRate(lsm303MagRate rate)
 /**************************************************************************/
 /*!
     @brief  Gets the most recent sensor event
+    @param  event A `sensors_event_t` to store the event data
+    @returns True on successful read
 */
 /**************************************************************************/
 bool Adafruit_LSM303DLH_Mag_Unified::getEvent(sensors_event_t *event) {
