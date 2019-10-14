@@ -16,12 +16,15 @@ env:
 
 before_install:
   - source <(curl -SLs https://raw.githubusercontent.com/adafruit/travis-ci-arduino/master/install.sh)
+  - curl -SLs https://raw.githubusercontent.com/adafruit/travis-ci-arduino/master/run-clang-format.py > run-clang-format.py
 
 install:
-   - arduino --install-library "Adafruit Unified Sensor"
+  - arduino --install-library "Adafruit Unified Sensor"
+  - arduino --install-library "Adafruit BusIO"
 
 script:
   - build_main_platforms
 
 after_success:
   - source <(curl -SLs https://raw.githubusercontent.com/adafruit/travis-ci-arduino/master/library_check.sh)
+  - source <(curl -SLs  https://raw.githubusercontent.com/adafruit/travis-ci-arduino/master/doxy_gen_and_deploy.sh)
