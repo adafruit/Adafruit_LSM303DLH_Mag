@@ -20,7 +20,8 @@
 #else
 #include "WProgram.h"
 #endif
-
+#include <Adafruit_BusIO_Register.h>
+#include <Adafruit_I2CDevice.h>
 #include <Adafruit_Sensor.h>
 #include <Wire.h>
 
@@ -28,6 +29,7 @@
     I2C ADDRESS/BITS
     -----------------------------------------------------------------------*/
 #define LSM303_ADDRESS_MAG (0x3C >> 1) // 0011110x
+#define _ADDRESS_MAG  (0x3C >> 1)
 /*=========================================================================*/
 
 typedef enum {
@@ -103,7 +105,8 @@ class Adafruit_LSM303DLH_Mag_Unified : public Adafruit_Sensor {
 public:
   Adafruit_LSM303DLH_Mag_Unified(int32_t sensorID = -1);
 
-  bool begin(void);
+  bool begin(uint8_t i2c_addr = _ADDRESS_MAG, TwoWire *wire = &Wire);
+
   void enableAutoRange(bool enable);
   void setMagGain(lsm303MagGain gain);
   void setMagRate(lsm303MagRate rate);
@@ -119,7 +122,9 @@ private:
 
   void write8(byte address, byte reg, byte value);
   byte read8(byte address, byte reg);
-  void read(void);
+  void read(void);  
+  Adafruit_I2CDevice *i2c_dev;
+
 };
 
 #endif
