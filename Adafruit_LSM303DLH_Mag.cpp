@@ -20,9 +20,8 @@
 
 #include <Wire.h>
 
-#include <limits.h>
-
 #include "Adafruit_LSM303DLH_Mag.h"
+#include <limits.h>
 
 /* enabling this #define will enable the debug print blocks
 #define LSM303_DEBUG
@@ -40,91 +39,35 @@ static float _lsm303Mag_Gauss_LSB_Z = 980.0F;   // Varies with gain
 
 /**************************************************************************/
 /*!
-    @brief  Abstract away platform differences in Arduino wire library
-*/
-/**************************************************************************/
-void Adafruit_LSM303DLH_Mag_Unified::write8(byte address, byte reg,
-                                            byte value) {
-  Wire.beginTransmission(address);
-#if ARDUINO >= 100
-  Wire.write((uint8_t)reg);
-  Wire.write((uint8_t)value);
-#else
-  Wire.send(reg);
-  Wire.send(value);
-#endif
-  Wire.endTransmission();
-}
-
-/**************************************************************************/
-/*!
-    @brief  Abstract away platform differences in Arduino wire library
-*/
-/**************************************************************************/
-byte Adafruit_LSM303DLH_Mag_Unified::read8(byte address, byte reg) {
-  byte value;
-
-  Wire.beginTransmission(address);
-#if ARDUINO >= 100
-  Wire.write((uint8_t)reg);
-#else
-  Wire.send(reg);
-#endif
-  Wire.endTransmission();
-  Wire.requestFrom(address, (byte)1);
-#if ARDUINO >= 100
-  value = Wire.read();
-#else
-  value = Wire.receive();
-#endif
-  Wire.endTransmission();
-
-  return value;
-}
-
-/**************************************************************************/
-/*!
     @brief  Reads the raw data from the sensor
 */
 /**************************************************************************/
 void Adafruit_LSM303DLH_Mag_Unified::read() {
   // Read the magnetometer
-  Wire.beginTransmission((byte)LSM303_ADDRESS_MAG);
-#if ARDUINO >= 100
-  Wire.write(LSM303_REGISTER_MAG_OUT_X_H_M);
-#else
-  Wire.send(LSM303_REGISTER_MAG_OUT_X_H_M);
-#endif
-  Wire.endTransmission();
-  Wire.requestFrom((byte)LSM303_ADDRESS_MAG, (byte)6);
 
-  // Wait around until enough data is available
-  while (Wire.available() < 6)
-    ;
+  // Note high before low (different than accel)
+  Adafruit_BusIO_Register data_reg =
+      Adafruit_BusIO_Register(i2c_dev, LSM303_REGISTER_MAG_OUT_X_H_M, 6);
 
-// Note high before low (different than accel)
-#if ARDUINO >= 100
-  uint8_t xhi = Wire.read();
-  uint8_t xlo = Wire.read();
-  uint8_t zhi = Wire.read();
-  uint8_t zlo = Wire.read();
-  uint8_t yhi = Wire.read();
-  uint8_t ylo = Wire.read();
-#else
-  uint8_t xhi = Wire.receive();
-  uint8_t xlo = Wire.receive();
-  uint8_t zhi = Wire.receive();
-  uint8_t zlo = Wire.receive();
-  uint8_t yhi = Wire.receive();
-  uint8_t ylo = Wire.receive();
-#endif
+  uint8_t buffer[6];
 
-  // Shift values to create properly formed integer (low byte first)
-  raw.x = (int16_t)(xlo | ((int16_t)xhi << 8));
-  raw.y = (int16_t)(ylo | ((int16_t)yhi << 8));
-  raw.z = (int16_t)(zlo | ((int16_t)zhi << 8));
+  data_reg.read(buffer, 6);
+
+  uint8_t xhi = buffer[0];
+  uint8_t xlo = buffer[1];
+  uint8_t zhi = buffer[2];
+  uint8_t zlo = buffer[3];
+  uint8_t yhi = buffer[4];
+  uint8_t ylo = buffer[5];
+
+  raw.x = (int16_t)((xhi << 8) | xlo);
+  raw.y = (int16_t)((yhi << 8) | ylo);
+  raw.z = (int16_t)((zhi << 8) | zlo);
 }
 
+/***************************************************************************
+ PUBLIC FUNCTIONS
+ ***************************************************************************/
 /***************************************************************************
  CONSTRUCTOR
  ***************************************************************************/
@@ -146,33 +89,43 @@ Adafruit_LSM303DLH_Mag_Unified::Adafruit_LSM303DLH_Mag_Unified(
   raw.z = 0;
 }
 
-/***************************************************************************
- PUBLIC FUNCTIONS
- ***************************************************************************/
-
-/**************************************************************************/
 /*!
-    @brief  Setups the HW
-    @returns True on success, false if the sensor cannot be found
-*/
-/**************************************************************************/
-bool Adafruit_LSM303DLH_Mag_Unified::begin() {
-  // Enable I2C
-  Wire.begin();
+ *    @brief  Sets up the hardware and initializes I2C
+ *    @param  i2c_address
+ *            The I2C address to be used.
+ *    @param  wire
+ *            The Wire object to be used for I2C connections.
+ *    @return True if initialization was successful, otherwise false.
+ */
+bool Adafruit_LSM303DLH_Mag_Unified::begin(uint8_t i2c_address, TwoWire *wire) {
 
-  // Enable the magnetometer
-  write8(LSM303_ADDRESS_MAG, LSM303_REGISTER_MAG_MR_REG_M, 0x00);
+  i2c_dev = new Adafruit_I2CDevice(i2c_address, wire);
 
-  // LSM303DLHC has no WHOAMI register so read CRA_REG_M to check
-  // the default value (0b00010000/0x10)
-  uint8_t reg1_a = read8(LSM303_ADDRESS_MAG, LSM303_REGISTER_MAG_CRA_REG_M);
-  if (reg1_a != 0x10) {
+  if (!i2c_dev->begin()) {
     return false;
   }
 
-  // Set the gain to a known level
-  setMagGain(LSM303_MAGGAIN_1_3);
+  // Enable the magnetometer
+  Adafruit_BusIO_Register mag_mr_reg =
+      Adafruit_BusIO_Register(i2c_dev, LSM303_REGISTER_MAG_MR_REG_M, 1);
+  mag_mr_reg.write(0x00);
 
+  // LSM303DLHC has no WHOAMI register, but it has IRx_REG_M that should be
+  // constant
+  Adafruit_BusIO_Register irx_regs =
+      Adafruit_BusIO_Register(i2c_dev, LSM303_REGISTER_MAG_IRA_REG_M, 3);
+
+  uint8_t buffer[3];
+  irx_regs.read(buffer, 3);
+
+  if (buffer[0] != 0b01001000)
+    return false;
+  if (buffer[1] != 0b00110100)
+    return false;
+  if (buffer[2] != 0b00110011)
+    return false;
+
+  setMagGain(LSM303_MAGGAIN_1_3);
   return true;
 }
 
@@ -193,7 +146,13 @@ void Adafruit_LSM303DLH_Mag_Unified::enableAutoRange(bool enabled) {
 */
 /**************************************************************************/
 void Adafruit_LSM303DLH_Mag_Unified::setMagGain(lsm303MagGain gain) {
-  write8(LSM303_ADDRESS_MAG, LSM303_REGISTER_MAG_CRB_REG_M, (byte)gain);
+  Adafruit_BusIO_Register crb_reg =
+      Adafruit_BusIO_Register(i2c_dev, LSM303_REGISTER_MAG_CRB_REG_M, 1);
+
+  Adafruit_BusIO_RegisterBits mag_gain =
+      Adafruit_BusIO_RegisterBits(&crb_reg, 3, 5);
+
+  mag_gain.write(gain);
 
   magGain = gain;
 
@@ -236,8 +195,12 @@ void Adafruit_LSM303DLH_Mag_Unified::setMagGain(lsm303MagGain gain) {
 */
 /**************************************************************************/
 void Adafruit_LSM303DLH_Mag_Unified::setMagRate(lsm303MagRate rate) {
-  byte reg_m = ((byte)rate & 0x07) << 2;
-  write8(LSM303_ADDRESS_MAG, LSM303_REGISTER_MAG_CRA_REG_M, reg_m);
+
+  Adafruit_BusIO_Register cra_reg =
+      Adafruit_BusIO_Register(i2c_dev, LSM303_REGISTER_MAG_CRA_REG_M, 1);
+  Adafruit_BusIO_RegisterBits mag_rate =
+      Adafruit_BusIO_RegisterBits(&cra_reg, 3, 2);
+  mag_rate.write(rate);
 }
 
 /**************************************************************************/
@@ -252,11 +215,15 @@ bool Adafruit_LSM303DLH_Mag_Unified::getEvent(sensors_event_t *event) {
 
   /* Clear the event */
   memset(event, 0, sizeof(sensors_event_t));
+  Adafruit_BusIO_Register sr_reg =
+      Adafruit_BusIO_Register(i2c_dev, LSM303_REGISTER_MAG_SR_REG_Mg, 1);
+
+  Adafruit_BusIO_RegisterBits data_ready =
+      Adafruit_BusIO_RegisterBits(&sr_reg, 1, 0);
 
   while (!readingValid) {
 
-    uint8_t reg_mg = read8(LSM303_ADDRESS_MAG, LSM303_REGISTER_MAG_SR_REG_Mg);
-    if (!(reg_mg & 0x1)) {
+    if (!data_ready.read()) {
       return false;
     }
 
@@ -267,14 +234,7 @@ bool Adafruit_LSM303DLH_Mag_Unified::getEvent(sensors_event_t *event) {
     if (!autoRangeEnabled) {
       readingValid = true;
     } else {
-#ifdef LSM303_DEBUG
-      Serial.print(raw.x);
-      Serial.print(" ");
-      Serial.print(raw.y);
-      Serial.print(" ");
-      Serial.print(raw.z);
-      Serial.println(" ");
-#endif
+
       /* Check if the sensor is saturating or not */
       if ((raw.x >= 2040) | (raw.x <= -2040) | (raw.y >= 2040) |
           (raw.y <= -2040) | (raw.z >= 2040) | (raw.z <= -2040)) {
@@ -283,44 +243,32 @@ bool Adafruit_LSM303DLH_Mag_Unified::getEvent(sensors_event_t *event) {
         case LSM303_MAGGAIN_5_6:
           setMagGain(LSM303_MAGGAIN_8_1);
           readingValid = false;
-#ifdef LSM303_DEBUG
-          Serial.println("Changing range to +/- 8.1");
-#endif
+
           break;
         case LSM303_MAGGAIN_4_7:
           setMagGain(LSM303_MAGGAIN_5_6);
           readingValid = false;
-#ifdef LSM303_DEBUG
-          Serial.println("Changing range to +/- 5.6");
-#endif
+
           break;
         case LSM303_MAGGAIN_4_0:
           setMagGain(LSM303_MAGGAIN_4_7);
           readingValid = false;
-#ifdef LSM303_DEBUG
-          Serial.println("Changing range to +/- 4.7");
-#endif
+
           break;
         case LSM303_MAGGAIN_2_5:
           setMagGain(LSM303_MAGGAIN_4_0);
           readingValid = false;
-#ifdef LSM303_DEBUG
-          Serial.println("Changing range to +/- 4.0");
-#endif
+
           break;
         case LSM303_MAGGAIN_1_9:
           setMagGain(LSM303_MAGGAIN_2_5);
           readingValid = false;
-#ifdef LSM303_DEBUG
-          Serial.println("Changing range to +/- 2.5");
-#endif
+
           break;
         case LSM303_MAGGAIN_1_3:
           setMagGain(LSM303_MAGGAIN_1_9);
           readingValid = false;
-#ifdef LSM303_DEBUG
-          Serial.println("Changing range to +/- 1.9");
-#endif
+
           break;
         default:
           readingValid = true;

@@ -34,7 +34,7 @@ void setup(void) {
   while (!Serial)
     ; // will pause Zero, Leonardo, etc until serial console opens
 #endif
-  Serial.begin(9600);
+  Serial.begin(115200);
   Serial.println("Magnetometer Test");
   Serial.println("");
 
@@ -69,13 +69,6 @@ void loop(void) {
   Serial.print(event.magnetic.z);
   Serial.print("  ");
   Serial.println("uT");
-
-  /* Note: You can also get the raw (non unified values) for */
-  /* the last data sample as follows. The .getEvent call populates */
-  /* the raw values used below. */
-  // Serial.print("X Raw: "); Serial.print(mag.raw.x); Serial.print("  ");
-  // Serial.print("Y Raw: "); Serial.print(mag.raw.y); Serial.print("  ");
-  // Serial.print("Z Raw: "); Serial.print(mag.raw.z); Serial.println("");
 
   /* Delay before the next sample */
   delay(500);
