@@ -98,11 +98,10 @@ Adafruit_LSM303DLH_Mag_Unified::Adafruit_LSM303DLH_Mag_Unified(
  *    @return True if initialization was successful, otherwise false.
  */
 bool Adafruit_LSM303DLH_Mag_Unified::begin(uint8_t i2c_address, TwoWire *wire) {
-  // Enable I2C
+
   i2c_dev = new Adafruit_I2CDevice(i2c_address, wire);
 
   if (!i2c_dev->begin()) {
-    Serial.println("Failed to init i2c address");
     return false;
   }
 
