@@ -75,7 +75,7 @@ typedef enum {
   LSM303_MAGRATE_15,  // 15 Hz
   LSM303_MAGRATE_30,  // 30 Hz
   LSM303_MAGRATE_75,  // 75 Hz
-  LSM303_MAGRATE_220  // 200 Hz
+  LSM303_MAGRATE_220  // 220 Hz
 } lsm303MagRate;
 /*=========================================================================*/
 
