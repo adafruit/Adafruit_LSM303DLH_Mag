@@ -1,12 +1,13 @@
-Adafruit_LSM303DLH_Mag [![Build Status](https://travis-ci.com/adafruit/Adafruit_LSM303DLH_Mag.svg?branch=master)](https://travis-ci.com/adafruit/Adafruit_LSM303DLH_Mag)
+Adafruit_LSM303DLH_Mag [![Build Status](https://github.com/adafruit/Adafruit_LSM303DLH_Mag/workflows/Arduino%20Library%20CI/badge.svg)](https://github.com/adafruit/Adafruit_LSM303DLH_Mag/actions)
 ================
+
 
 <a href="https://www.adafruit.com/product/1120"><img src="assets/board.jpg?raw=true" width="500px"></a>
 
 # Adafruit LSM303DLH Magnetometer Library
-This library is for the Adafruit LSM303 Breakouts' (http://www.adafruit.com/products/1120) magnetometer, and is based on Adafruit's Unified Sensor Library (Adafruit_Sensor).
+This library is for the LSM303DLH's magnetometer, and is based on Adafruit's Unified Sensor Library (Adafruit_Sensor).
 
-Tested and works great with the Adafruit's LSM303 Breakout Boards
+Tested and works great with the Adafruit's LSM303DLH Breakout Boards
 * https://www.adafruit.com/product/1120
 
 This chip uses I2C to communicate, 2 pins are required to interface
@@ -39,4 +40,4 @@ Written by Bryan Siepert for Adafruit Industries.
 BSD license, check license.txt for more information
 All text above must be included in any redistribution
 
-To install, use the Arduino Library Manager and search for "Adafruit LSM303 Accel" and install the library.
+To install, use the Arduino Library Manager and search for "Adafruit LSM303DLH Mag" and install the library.
