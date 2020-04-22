@@ -1,4 +1,4 @@
-Adafruit_LSM303DLH_Mag [![Build Status](https://github.com/adafruit/Adafruit_LSM303DLH_Mag/workflows/Arduino%20Library%20CI/badge.svg)](https://github.com/adafruit/Adafruit_LSM303DLH_Mag/actions)
+Adafruit_LSM303DLH_Mag [![Build Status](https://github.com/adafruit/Adafruit_LSM303DLH_Mag/workflows/Arduino%20Library%20CI/badge.svg)](https://github.com/adafruit/Adafruit_LSM303DLH_Mag/actions)[![Documentation](https://github.com/adafruit/ci-arduino/blob/master/assets/doxygen_badge.svg)](http://adafruit.github.io/Adafruit_LSM303DLH_Mag/html/index.html)
 ================
 
 
