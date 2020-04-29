@@ -1,6 +1,4 @@
 # Adafruit LSM303DLH Magnetometer [![Build Status](https://github.com/adafruit/Adafruit_LSM303DLH_Mag/workflows/Arduino%20Library%20CI/badge.svg)](https://github.com/adafruit/Adafruit_LSM303DLH_Mag/actions)[![Documentation](https://github.com/adafruit/ci-arduino/blob/master/assets/doxygen_badge.svg)](http://adafruit.github.io/Adafruit_LSM303DLH_Mag/html/index.html)
-[![Documentation](https://github.com/adafruit/ci-arduino/blob/master/assets/doxygen_badge.svg)](http://adafruit.github.io/Adafruit_LSM303DLH_Mag/html/index.html)Adafruit_LSM303DLH_Mag [![Build Status](https://github.com/adafruit/Adafruit_LSM303DLH_Mag/workflows/Arduino%20Library%20CI/badge.svg)](https://github.com/adafruit/Adafruit_LSM303DLH_Mag/actions)
-================
 
 
 <a href="https://www.adafruit.com/product/1120"><img src="assets/board.jpg?raw=true" width="500px"></a>
@@ -35,9 +33,13 @@ This is imporant useful for two reasons:
 
 Light sensors will always report units in lux, gyroscopes will always report units in rad/s, etc. ... freeing you up to focus on the data, rather than digging through the datasheet to understand what the sensor's raw numbers really mean.
 
-# Dependencies
+# Installation
+To install, use the Arduino Library Manager and search for "Adafruit LSM303DLH Mag" and install the library.
+
+## Dependencies
  * [Adafruit BusIO](https://github.com/adafruit/Adafruit_BusIO)
  * [Adafruit Unified Sensor Driver](https://github.com/adafruit/Adafruit_Sensor)
+
 # Contributing
 
 Contributions are welcome! Please read our [Code of Conduct](https://github.com/adafruit/Adafruit_LSM303DLH_Mag/blob/master/CODE_OF_CONDUCT.md>)
@@ -62,7 +64,7 @@ clang-format -i *.cpp *.h
 ```
 If you prefer to make the changes yourself, running `clang-format` without the `-i` flag will print out a formatted version of the file. You can save this to a file and diff it against the original to see the changes.
 
-Note that the formatting output by clang-format` is what the automated formatting checker will expect. Any diffs from this formatting will result in a failed build until they are addressed. Using the `-i` flag is highly recommended.
+Note that the formatting output by `clang-format` is what the automated formatting checker will expect. Any diffs from this formatting will result in a failed build until they are addressed. Using the `-i` flag is highly recommended.
 
 ### clang-format resources
   * [Binary builds and source available on the LLVM downloads page](https://releases.llvm.org/download.html)
@@ -73,4 +75,3 @@ Written by Bryan Siepert for Adafruit Industries.
 BSD license, check license.txt for more information
 All text above must be included in any redistribution
 
-To install, use the Arduino Library Manager and search for "Adafruit LSM303DLH Mag" and install the library.
