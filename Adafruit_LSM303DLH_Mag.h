@@ -1,17 +1,8 @@
-/***************************************************************************
-  This is a library for the LSM303DLH  magnentometer/compass
+/*!
+ * @file Adafruit_LSM303DLH_Mag.h
+ *
+ */
 
-  Designed specifically to work with the Adafruit LSM303DLHC Breakout
-
-  These displays use I2C to communicate, 2 pins are required to interface.
-
-  Adafruit invests time and resources providing this open source code,
-  please support Adafruit andopen-source hardware by purchasing products
-  from Adafruit!
-
-  Written by Bryan Siepert for Adafruit Industries.
-  BSD license, all text above must be included in any redistribution
- ***************************************************************************/
 #ifndef LSM303DLH_MAG_H
 #define LSM303DLH_MAG_H
 
