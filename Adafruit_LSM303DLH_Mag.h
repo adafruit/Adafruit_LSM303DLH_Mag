@@ -16,8 +16,10 @@
 #include <Adafruit_Sensor.h>
 #include <Wire.h>
 
-
-define _ADDRESS_MAG 0x1E /*!< I2C Address
+/*!
+ * @brief I2C Address
+ */
+define _ADDRESS_MAG 0x1E
 
 /*!
  * @brief I2C bits
