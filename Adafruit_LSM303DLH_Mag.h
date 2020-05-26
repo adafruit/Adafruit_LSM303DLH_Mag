@@ -19,7 +19,7 @@
 /*!
  * @brief I2C Address
  */
-define _ADDRESS_MAG 0x1E
+#define _ADDRESS_MAG 0x1E
 
 /*!
  * @brief I2C bits
