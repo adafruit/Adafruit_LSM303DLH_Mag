@@ -1,17 +1,8 @@
-/***************************************************************************
-  This is a library for the LSM303DLH  magnentometer/compass
+/*!
+ * @file Adafruit_LSM303DLH_Mag.h
+ *
+ */
 
-  Designed specifically to work with the Adafruit LSM303DLHC Breakout
-
-  These displays use I2C to communicate, 2 pins are required to interface.
-
-  Adafruit invests time and resources providing this open source code,
-  please support Adafruit andopen-source hardware by purchasing products
-  from Adafruit!
-
-  Written by Bryan Siepert for Adafruit Industries.
-  BSD license, all text above must be included in any redistribution
- ***************************************************************************/
 #ifndef LSM303DLH_MAG_H
 #define LSM303DLH_MAG_H
 
@@ -25,12 +16,14 @@
 #include <Adafruit_Sensor.h>
 #include <Wire.h>
 
-/*=========================================================================
-    I2C ADDRESS/BITS
-    -----------------------------------------------------------------------*/
+/*!
+ * @brief I2C Address
+ */
 #define _ADDRESS_MAG 0x1E
-/*=========================================================================*/
 
+/*!
+ * @brief I2C bits
+ */
 typedef enum {
   LSM303_REGISTER_MAG_CRA_REG_M = 0x00,
   LSM303_REGISTER_MAG_CRB_REG_M = 0x01,
@@ -50,9 +43,9 @@ typedef enum {
 } lsm303MagRegisters_t;
 /*=========================================================================*/
 
-/*=========================================================================
-    MAGNETOMETER GAIN SETTINGS
-    -----------------------------------------------------------------------*/
+/*!
+ * @brief Magnetometer gain settings
+ */
 typedef enum {
   LSM303_MAGGAIN_1_3, // +/- 1.3
   LSM303_MAGGAIN_1_9, // +/- 1.9
@@ -64,9 +57,9 @@ typedef enum {
 } lsm303MagGain;
 /*=========================================================================*/
 
-/*=========================================================================
-    MAGNETOMETER UPDATE RATE SETTINGS
-    -----------------------------------------------------------------------*/
+/*!
+ * @brief Magnetometer update rate settings
+ */
 typedef enum {
   LSM303_MAGRATE_0_7, // 0.75 Hz
   LSM303_MAGRATE_1_5, // 1.5 Hz
@@ -91,10 +84,7 @@ typedef struct lsm303MagData_s {
 } lsm303MagData;
 /*=========================================================================*/
 
-/*=========================================================================
-    CHIP ID
-    -----------------------------------------------------------------------*/
-#define LSM303_ID (0b11010100)
+#define LSM303_ID (0b11010100) //!< Chip ID
 /*=========================================================================*/
 
 /*!
