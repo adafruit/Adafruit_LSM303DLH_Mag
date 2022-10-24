@@ -318,7 +318,7 @@ void Adafruit_LSM303DLH_Mag_Unified::getSensor(sensor_t *sensor) {
   memset(sensor, 0, sizeof(sensor_t));
 
   /* Insert the sensor name in the fixed length char array */
-  strncpy(sensor->name, "LSM303DLH Mag", sizeof(sensor->name) - 1);
+  strncpy(sensor->name, "LSM303 Mag", sizeof(sensor->name) - 1);
   sensor->name[sizeof(sensor->name) - 1] = 0;
   sensor->version = 1;
   sensor->sensor_id = _sensorID;
