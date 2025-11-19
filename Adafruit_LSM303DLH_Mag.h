@@ -112,7 +112,7 @@ private:
   void write8(byte address, byte reg, byte value);
   byte read8(byte address, byte reg);
   void read(void);
-  Adafruit_I2CDevice *i2c_dev;
+  Adafruit_I2CDevice *i2c_dev = nullptr;
 };
 
 #endif
