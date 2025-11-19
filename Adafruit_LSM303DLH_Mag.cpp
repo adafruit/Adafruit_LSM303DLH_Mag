@@ -118,11 +118,6 @@ bool Adafruit_LSM303DLH_Mag_Unified::begin(uint8_t i2c_address, TwoWire *wire) {
     return false;
   }
 
-  // Enable the magnetometer
-  Adafruit_BusIO_Register mag_mr_reg =
-      Adafruit_BusIO_Register(i2c_dev, LSM303_REGISTER_MAG_MR_REG_M, 1);
-  mag_mr_reg.write(0x00);
-
   // LSM303DLHC has no WHOAMI register, but it has IRx_REG_M that should be
   // constant
   Adafruit_BusIO_Register irx_regs =
@@ -137,6 +132,11 @@ bool Adafruit_LSM303DLH_Mag_Unified::begin(uint8_t i2c_address, TwoWire *wire) {
     return false;
   if (buffer[2] != 0b00110011)
     return false;
+
+  // Enable the magnetometer
+  Adafruit_BusIO_Register mag_mr_reg =
+      Adafruit_BusIO_Register(i2c_dev, LSM303_REGISTER_MAG_MR_REG_M, 1);
+  mag_mr_reg.write(0x00);
 
   setMagGain(LSM303_MAGGAIN_1_3);
   return true;
